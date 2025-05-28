@@ -135,4 +135,20 @@ class TestAccountService(TestCase):
         data = resp.get_json()
         self.assertEqual(data["name"], account.name)
     
+    def test_account_not_found(self):
+        """It should throw 404 NOT FOUND"""
+        resp = self.client.get(f"{BASE_URL}/0")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+    
+    # def test_list_all_account(self):
+    #     """It sould List all account from the database"""
+    #     accounts = self._create_accounts(4)[0]
+    #     response = self.client.post(
+    #         BASE_URL,
+    #         json=account.serialize(),
+    #         content_type="application/json"
+    #     )
+    #     many = response.get_json()
+    #     self.assertEqual(many.lenght, 4)
+
     
