@@ -57,6 +57,7 @@ def create_accounts():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
@@ -64,16 +65,15 @@ def create_accounts():
 # ... place you code here to LIST accounts ...
 @app.route("/accounts", methods=["GET"])
 def get_all_account():
-    app.logger.info("Request to get all account")
 
+    app.logger.info("Request to get all account")
     accounts = Account.all()
     if not accounts:
         abort(status.HTTP_404_NOT_FOUND, "Not account found in the system")
-    
     account_list = [account.serialize() for account in accounts]
     app.logger.info("Returning [%s] accounts", len(account_list))
-        
     return jsonify(account_list), status.HTTP_200_OK
+
 
 ######################################################################
 # READ AN ACCOUNT
@@ -83,11 +83,9 @@ def get_all_account():
 @app.route("/accounts/<id>", methods=["GET"])
 def read_account(id):
     app.logger.info("Request to read an Account with id: %s", id)
-    
     account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND, f"Account with id [{id}] could not be found.")
-    
     return account.serialize(), status.HTTP_200_OK
 
 
@@ -99,14 +97,11 @@ def read_account(id):
 @app.route("/accounts/<int:id>", methods=["PUT"])
 def update_account(id):
     app.logger.info("Udating the account with the id: %s", id)
-
     account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND, f"Account with id [{id}] could not be found.")
-    
     account.deserialize(request.get_json())
     account.update()
-
     return account.serialize(), status.HTTP_200_OK
 
 
@@ -120,15 +115,13 @@ def delete_account(id):
     app.logger.info("Deleting the account with the id: %s", id)
     account = Account.find(id)
     if account:
-            account.delete()
-
+        account.delete()
     return "", status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
-
 
 def check_content_type(media_type):
     """Checks that the media type is correct"""
